@@ -1,3 +1,19 @@
 body {
     color: red;
+    background-color: teal;
+}
+
+div {
+  color: blue;
+  background-color: green;
+}
+
+.div1 {
+  color: magenta;
+  background-color: orange;
+}
+
+.div2 {
+  color: green;
+  background-color: #E80C0C;
 }

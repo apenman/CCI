@@ -18,6 +18,7 @@ for i in ${@:2}
 do
   repo_name=$i
   curl -u $user_name https://api.github.com/user/repos -d "{\"name\":\"$repo_name\"}"
+  echo $?
   git clone https://github.com/$user_name/$repo_name.git
   cd $repo_name
   touch index.html

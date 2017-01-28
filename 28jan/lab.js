@@ -8,6 +8,8 @@ var sayFood = function(food) {
   var div = document.getElementById("textDiv");
   div.textContent = food;
   var text = div.textContent;
+  var msg = new SpeechSynthesisUtterance(food);
+  window.speechSynthesis.speak(msg);
 }
 
 function forEach(array, action) {

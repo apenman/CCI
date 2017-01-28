@@ -20,8 +20,12 @@ function forEach(array, action) {
 
 var meatButton = function() {
   forEach(food.meat, sayFood);
+  document.getElementById("textDiv").style.color = 'red';
+  document.getElementById("textDiv").style.fontSize =  '20px';
 }
 
 var vegButton = function() {
   forEach(food.veg, sayFood);
+  document.getElementById("textDiv").style.color = 'green';
+  document.getElementById("textDiv").style.fontSize =  '12px';
 }

@@ -1,8 +1,22 @@
+/*
+ * IDEAS:
+ *  -Direction of click and drag determines (counter-)clockwise spin
+ *  -Random colored orbits
+ *    -Color changes when crossing paths of other orbits
+ *  -If balls hit, they switch direction
+ *  -Toggle on and off drawing of paths
+ *  -Draw line while dragging mouse to help show current circle being drawn
+ *    -If line is too short, turn line red and fade out
+ *  -Delete circles
+*/
+
 var currStartX, currStartY;
 var circles;
 var dir = 1;
+var showPaths;
 
 function setup() {
+  showPaths = true;
   circles = [];
   createCanvas(windowWidth,windowWidth);
 }
@@ -36,6 +50,12 @@ function mouseReleased() {
   currStartY = 0;
 }
 
+function keyTyped() {
+  if (key === 'v')
+    showPaths = !showPaths;a
+}
+
+
 function CoolCircle(x, y, diameter) {
   this.location = createVector(x, y);
   this.diameter = diameter;
@@ -45,8 +65,12 @@ function CoolCircle(x, y, diameter) {
   this.display = function() {
     console.log("DISP");
     this.angle += this.speed;
-    noFill();
-    ellipse(this.location.x, this.location.y, this.diameter);
+
+    // Only show the orbit path if variable is true (toggle this view with 'v')
+    if(showPaths) {
+      noFill();
+      ellipse(this.location.x, this.location.y, this.diameter);
+    }
 
     var x = this.location.x + sin(this.angle) * (this.diameter/2);
     var y = this.location.y + cos(this.angle) * (this.diameter/2);

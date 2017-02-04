@@ -3,11 +3,9 @@
  *  -Direction of click and drag determines (counter-)clockwise spin
  *  -Color changes when crossing paths of other orbits (???)
  *  -If balls hit, they switch direction
- *  -Draw line while dragging mouse to help show current circle being drawn
- *    -If line is too short, turn line red and fade out
+ *  -If line is too short, turn line red and fade out -- need to create fading line constructor for this
  *  -Delete suns
 */
-
 var currStartX, currStartY;
 var suns;
 var showPaths, colorize, collisionDetect;
@@ -23,6 +21,14 @@ function setup() {
 
 function draw() {
   background(255);
+
+  // Draw a line if mouse is being dragged to create
+  if(mouseIsPressed) {
+    stroke(0);
+    line(currStartX, currStartY, mouseX, mouseY);
+  }
+
+  // Get our system going!
   for(var i = 0; i < suns.length; i++) {
     suns[i].moveOrbiters();
     suns[i].display();
@@ -30,6 +36,7 @@ function draw() {
 }
 
 function mousePressed() {
+  // Log starting point for sun
   if(!currStartX && !currStartY) {
     currStartX = mouseX;
     currStartY = mouseY;
@@ -37,29 +44,31 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-  // When mouse is released
-  // Calc distance from currStart to (mouseX, mouseY)
+  // Calc distance from currStart to (mouseX, mouseY) -- we're going to draw a sun
   var distance = dist(currStartX, currStartY, mouseX, mouseY);
   var midX = lerp(currStartX, mouseX, .5);
   var midY = lerp(currStartY, mouseY, .5);
   // Add sun to suns arr
   if(distance > 50)
     suns.push(new Sun(midX, midY, distance, (currStartX > mouseX ? false : true)))
-  // Set currStart to 0
+  // Reset currStart to 0
   currStartX = 0;
   currStartY = 0;
 }
 
 function keyTyped() {
+  // Toggle path view
   if (key === 'v')
     showPaths = !showPaths;
+  // Toggle colorizer
   else if (key === 'c')
     colorize = !colorize;
+  // Toggle collision detection
   else if (key === 'b')
     collisionDetect = !collisionDetect
 }
 
-
+// Sun object is the main circle, has 1 or more orbiters (hardcoded to 1 now)
 function Sun(x, y, diameter, clockwiseOrbit) {
   this.midPoint = createVector(x, y);
   this.diameter = diameter;
@@ -87,10 +96,12 @@ function Sun(x, y, diameter, clockwiseOrbit) {
   }
 }
 
+// Orbiters orbit around the center point of their sun
 function Orbiter(clockwiseOrbit) {
   this.color = color(random(255), random(255), random(255));
   this.angle = 0.05;
   this.speed = random(0.02, 0.05);
+  // Orbit's current location offset from the sun's midpoint
   this.midPointOffset = createVector();
   // Determines direction of orbit
   this.clockwise = clockwiseOrbit;

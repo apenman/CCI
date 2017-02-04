@@ -5,8 +5,13 @@
  *  -If balls hit, they switch direction
  *  -If line is too short, turn line red and fade out -- need to create fading line constructor for this
  *  -Delete suns
- *  -Turn all coordinates to vectors
 */
+
+/*
+ * TODO:
+ * -Turn all coordinates to vectors
+ */
+
 var currStartX, currStartY;
 var suns;
 var showPaths, colorize, collisionDetect, nightMode;
@@ -73,6 +78,9 @@ function keyTyped() {
     collisionDetect = !collisionDetect
   else if (key === 'n')
     nightMode = !nightMode
+  else if(key === 'x')
+    // Remove last sun
+    suns.splice(suns.length-1, 1);
 }
 
 // Sun object is the main circle, has 1 or more orbiters (hardcoded to 1 now)

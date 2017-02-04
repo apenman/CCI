@@ -5,32 +5,37 @@
  *  -If balls hit, they switch direction
  *  -If line is too short, turn line red and fade out -- need to create fading line constructor for this
  *  -Delete suns
+ *  -Turn all coordinates to vectors
 */
 var currStartX, currStartY;
 var suns;
-var showPaths, colorize, collisionDetect;
+var showPaths, colorize, collisionDetect, nightMode;
 var orbitRadius = 20;
 
 function setup() {
   showPaths = true;
   colorize = false;
   collisionDetect = false;
+  nightMode = false;
   suns = [];
   createCanvas(windowWidth,windowWidth);
 }
 
 function draw() {
-  background(255);
+  background(nightMode ? 0 : 255);
 
   // Draw a line if mouse is being dragged to create
   if(mouseIsPressed) {
-    stroke(0);
+    stroke(nightMode ? 255: 0);
     line(currStartX, currStartY, mouseX, mouseY);
   }
 
   // Get our system going!
   for(var i = 0; i < suns.length; i++) {
     suns[i].moveOrbiters();
+    // Actual collision detection works, changing orbit direction does not
+    if(collisionDetect)
+      suns[i].checkCollisions();
     suns[i].display();
   }
 }
@@ -66,6 +71,8 @@ function keyTyped() {
   // Toggle collision detection
   else if (key === 'b')
     collisionDetect = !collisionDetect
+  else if (key === 'n')
+    nightMode = !nightMode
 }
 
 // Sun object is the main circle, has 1 or more orbiters (hardcoded to 1 now)
@@ -77,7 +84,7 @@ function Sun(x, y, diameter, clockwiseOrbit) {
   this.display = function() {
       // Only show the orbit path if variable is true (toggle this view with 'v')
       if(showPaths) {
-        stroke(0);
+        stroke(nightMode ? 255: 0);
         noFill();
         ellipse(this.midPoint.x, this.midPoint.y, this.diameter);
     }
@@ -92,6 +99,18 @@ function Sun(x, y, diameter, clockwiseOrbit) {
     for(var i = 0; i < this.orbiters.length; i++) {
       // Orbiters move based off angle; sun diameter is requiredo
       this.orbiters[i].move(this.diameter);
+    }
+  }
+
+  this.checkCollisions = function() {
+    for(var i = 0; i < suns.length; i++) {
+      // Check if itself and that the radiuses can possible intersect
+      if(this.midPoint != suns[i].midPoint &&
+        this.midPoint.dist(suns[i].midPoint) < (this.diameter / 2 + suns[i].diameter / 2 + orbitRadius)) {
+          for(var j = 0; j < this.orbiters.length; j++) {
+            this.orbiters[j].checkSunCollisions(this.midPoint, suns[i]);
+          }
+      }
     }
   }
 }
@@ -111,7 +130,7 @@ function Orbiter(clockwiseOrbit) {
     if(colorize)
       fill(this.color);
     else
-      fill(0);
+      fill(nightMode ? 255 : 0);
     noStroke();
     ellipse(x+this.midPointOffset.x, y+this.midPointOffset.y, orbitRadius);
   }
@@ -120,5 +139,18 @@ function Orbiter(clockwiseOrbit) {
     this.angle += (this.speed);
     this.midPointOffset.x = (this.clockwise ? sin(this.angle) : cos(this.angle)) * (sunDiameter/2);
     this.midPointOffset.y = (this.clockwise ? cos(this.angle) : sin(this.angle)) * (sunDiameter/2);
+  }
+
+  // Checks against all of a sun's orbiters
+  // If collision is detected switch this.clockwise
+  this.checkSunCollisions = function(midPoint, sun) {
+    for(var i = 0; i < sun.orbiters.length; i++) {
+      var myLocation = p5.Vector.add(midPoint, this.midPointOffset);
+      var theirLocation = p5.Vector.add(sun.midPoint, sun.orbiters[i].midPointOffset);
+      var distance = myLocation.dist(theirLocation);
+      if(distance <= orbitRadius)
+        // We have hit
+        this.clockwise = !this.clockwise;
+    }
   }
 }

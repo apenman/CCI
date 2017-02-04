@@ -3,7 +3,6 @@
  *  -Direction of click and drag determines (counter-)clockwise spin
  *  -Color changes when crossing paths of other orbits (???)
  *  -If balls hit, they switch direction
- *  -Toggle on and off drawing of paths
  *  -Draw line while dragging mouse to help show current circle being drawn
  *    -If line is too short, turn line red and fade out
  *  -Delete suns
@@ -44,9 +43,8 @@ function mouseReleased() {
   var midX = lerp(currStartX, mouseX, .5);
   var midY = lerp(currStartY, mouseY, .5);
   // Add sun to suns arr
-  //console.log("PUSHING NEW AT: " + midX + ", " + midY);
   if(distance > 50)
-    suns.push(new Sun(midX, midY, distance))
+    suns.push(new Sun(midX, midY, distance, (currStartX > mouseX ? false : true)))
   // Set currStart to 0
   currStartX = 0;
   currStartY = 0;
@@ -62,10 +60,10 @@ function keyTyped() {
 }
 
 
-function Sun(x, y, diameter) {
+function Sun(x, y, diameter, clockwiseOrbit) {
   this.midPoint = createVector(x, y);
   this.diameter = diameter;
-  this.orbiters = [new Orbiter()];
+  this.orbiters = [new Orbiter(clockwiseOrbit)];
 
   this.display = function() {
       // Only show the orbit path if variable is true (toggle this view with 'v')
@@ -89,13 +87,13 @@ function Sun(x, y, diameter) {
   }
 }
 
-function Orbiter() {
+function Orbiter(clockwiseOrbit) {
   this.color = color(random(255), random(255), random(255));
   this.angle = 0.05;
   this.speed = random(0.02, 0.05);
   this.midPointOffset = createVector();
   // Determines direction of orbit
-  this.clockwise = false;
+  this.clockwise = clockwiseOrbit;
 
   this.display = function(x, y) {
     // Draw orbiter (toggle color with 'c')

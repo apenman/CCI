@@ -1,8 +1,7 @@
 /*
  * IDEAS:
  *  -Direction of click and drag determines (counter-)clockwise spin
- *  -Random colored orbits
- *    -Color changes when crossing paths of other orbits
+ *  -Color changes when crossing paths of other orbits (???)
  *  -If balls hit, they switch direction
  *  -Toggle on and off drawing of paths
  *  -Draw line while dragging mouse to help show current circle being drawn
@@ -12,11 +11,13 @@
 
 var currStartX, currStartY;
 var circles;
-var dir = 1;
-var showPaths;
+var showPaths, colorize, collisionDetect;
+var orbitRadius = 20;
 
 function setup() {
   showPaths = true;
+  colorize = false;
+  collisionDetect = false;
   circles = [];
   createCanvas(windowWidth,windowWidth);
 }
@@ -42,7 +43,7 @@ function mouseReleased() {
   var midX = lerp(currStartX, mouseX, .5);
   var midY = lerp(currStartY, mouseY, .5);
   // Add circle to circles arr
-  console.log("PUSHING NEW AT: " + midX + ", " + midY);
+  //console.log("PUSHING NEW AT: " + midX + ", " + midY);
   if(distance > 50)
     circles.push(new CoolCircle(midX, midY, distance))
   // Set currStart to 0
@@ -52,31 +53,42 @@ function mouseReleased() {
 
 function keyTyped() {
   if (key === 'v')
-    showPaths = !showPaths;a
+    showPaths = !showPaths;
+  else if (key === 'c')
+    colorize = !colorize;
+  else if (key === 'b')
+    collisionDetect = !collisionDetect
 }
 
 
 function CoolCircle(x, y, diameter) {
-  this.location = createVector(x, y);
+  this.midPoint = createVector(x, y);
   this.diameter = diameter;
   this.angle = 0.05;
   this.speed = random(0.02, 0.05);
+  this.color = color(random(255), random(255), random(255));
+  // Determines direction of orbit
+  this.clockwise = false;
 
   this.display = function() {
-    console.log("DISP");
-    this.angle += this.speed;
+    this.angle += (this.speed);
 
     // Only show the orbit path if variable is true (toggle this view with 'v')
     if(showPaths) {
+      stroke(0);
       noFill();
-      ellipse(this.location.x, this.location.y, this.diameter);
+      ellipse(this.midPoint.x, this.midPoint.y, this.diameter);
     }
 
-    var x = this.location.x + sin(this.angle) * (this.diameter/2);
-    var y = this.location.y + cos(this.angle) * (this.diameter/2);
+    var x = this.midPoint.x + (this.clockwise ? sin(this.angle) : cos(this.angle)) * (this.diameter/2);
+    var y = this.midPoint.y + (this.clockwise ? cos(this.angle) : sin(this.angle)) * (this.diameter/2);
 
-    // Draw orbiter
-    fill(0);
-    ellipse(x, y, 20, 20);
+    // Draw orbiter (toggle color with 'c')
+    if(colorize)
+      fill(this.color);
+    else
+      fill(0);
+    noStroke();
+    ellipse(x, y, orbitRadius);
   }
 }

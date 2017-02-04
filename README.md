@@ -8,3 +8,4 @@ Nothing yet :disappointed: come back later
 ## Random Inspiration
 * [NONOTAK's light installations](http://www.nonotak.com/) (I'm hoping to try out making physical works of art)
 * [Mojigen & Sujigen by Yuichiro Katsumoto](https://vimeo.com/194485354)
+Repo created with bash script :-)

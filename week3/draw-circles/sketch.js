@@ -68,15 +68,15 @@ function mouseReleased() {
 
 function keyTyped() {
   // Toggle path view
-  if (key === 'v')
+  if(key === 'v')
     showPaths = !showPaths;
   // Toggle colorizer
-  else if (key === 'c')
+  else if(key === 'c')
     colorize = !colorize;
   // Toggle collision detection
-  else if (key === 'b')
+  else if(key === 'b')
     collisionDetect = !collisionDetect
-  else if (key === 'n')
+  else if(key === 'n')
     nightMode = !nightMode
   else if(key === 'x')
     // Remove last sun

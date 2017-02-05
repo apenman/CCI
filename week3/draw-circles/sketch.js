@@ -1,20 +1,13 @@
 /*
  * IDEAS:
- *  -Direction of click and drag determines (counter-)clockwise spin
  *  -Color changes when crossing paths of other orbits (???)
  *  -If balls hit, they switch direction
  *  -If line is too short, turn line red and fade out -- need to create fading line constructor for this
- *  -Delete suns
 */
-
-/*
- * TODO:
- * -Turn all coordinates to vectors
- */
 
 var currStartX, currStartY;
 var suns;
-var showPaths, colorize, collisionDetect, nightMode;
+var showPaths, colorize, collisionDetect, nightMode, debug;
 var orbitRadius = 20;
 
 function setup() {
@@ -75,9 +68,9 @@ function keyTyped() {
     colorize = !colorize;
   // Toggle collision detection
   else if(key === 'b')
-    collisionDetect = !collisionDetect
+    collisionDetect = !collisionDetect;
   else if(key === 'n')
-    nightMode = !nightMode
+    nightMode = !nightMode;
   else if(key === 'x')
     // Remove last sun
     suns.splice(suns.length-1, 1);
@@ -99,7 +92,7 @@ function Sun(x, y, diameter, clockwiseOrbit) {
 
     for(var i = 0; i < this.orbiters.length; i++) {
       // Orbiters draw based off midpoint of sun
-      this.orbiters[i].display(this.midPoint.x, this.midPoint.y);
+      this.orbiters[i].display(this.midPoint);
     }
   }
 
@@ -133,20 +126,24 @@ function Orbiter(clockwiseOrbit) {
   // Determines direction of orbit
   this.clockwise = clockwiseOrbit;
 
-  this.display = function(x, y) {
+  this.display = function(midPoint) {
     // Draw orbiter (toggle color with 'c')
     if(colorize)
       fill(this.color);
     else
       fill(nightMode ? 255 : 0);
     noStroke();
-    ellipse(x+this.midPointOffset.x, y+this.midPointOffset.y, orbitRadius);
+    ellipse(midPoint.x+this.midPointOffset.x, midPoint.y+this.midPointOffset.y, orbitRadius);
   }
 
   this.move = function(sunDiameter) {
-    this.angle += (this.speed);
-    this.midPointOffset.x = (this.clockwise ? sin(this.angle) : cos(this.angle)) * (sunDiameter/2);
-    this.midPointOffset.y = (this.clockwise ? cos(this.angle) : sin(this.angle)) * (sunDiameter/2);
+    if(this.clockwise)
+      this.angle += this.speed;
+    else
+      this.angle -= this.speed;
+
+    this.midPointOffset.x = sin(this.angle) * (sunDiameter/2);
+    this.midPointOffset.y = cos(this.angle) * (sunDiameter/2);
   }
 
   // Checks against all of a sun's orbiters
@@ -156,9 +153,11 @@ function Orbiter(clockwiseOrbit) {
       var myLocation = p5.Vector.add(midPoint, this.midPointOffset);
       var theirLocation = p5.Vector.add(sun.midPoint, sun.orbiters[i].midPointOffset);
       var distance = myLocation.dist(theirLocation);
-      if(distance <= orbitRadius)
+      if(distance <= orbitRadius + 1) {
         // We have hit
+        this.color = color(random(255), random(255), random(255));
         this.clockwise = !this.clockwise;
+      }
     }
   }
 }

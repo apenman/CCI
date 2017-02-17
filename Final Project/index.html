@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>Alex Penman</h2>
+					Gray Area Immersive Winter 2017
+				</section>
+
+				<section>
+					<section>
+						<h2>Concept</h2>
+
+						<p>To immerse the viewer in a self-reflective state of both calmness and chaos through Kinect motion tracking visualizations.</p>
+					</section>
+					<section>
+						<img src="assets/zimoun.jpg">
+					</section>
+					<section>
+						<img src="assets/lull.jpg">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Experience</h2>
+						<p>The installation space will consist of three walls creating an open room. Two white side walls and one main wall with a video projection captured by a Kinect pointed into the room.</p>
+						<p>The viewer will see a projection of themselves on the main wall in the installation room.</p>
+					</section>
+					<section>
+						<p>The viewer's body will be animated using a particle system. There will be no defining lines for the body but the particles will stay in form based on different parameters.</p>
+					</section>
+					<section>
+						<p>If the viewer stands in a relaxed state, the particles will flow slowly and peacefully, staying well within the boundaries of the viewer's body form.</p>
+						<p>As the viewer moves and the body is stretched, particles will speed up and begin to move outside of the viewer's form, blurring the lines of the body.</p>
+					</section>
+				</section>
+				<section>
+					<h2>Technology</h2>
+					<p>Kinect</p>
+					<p>Processing</p>
+					<p>Projector</p>
+				</section>
+				<section>
+					<section>
+						<h2>Stretch Ideas For Project</h2>
+						<p>These ideas may be added to the final project if the original idea is complete and proven working/effective.</p>
+					</section>
+					<section>
+						<h2>Atmospheric Hardware</h2>
+						<p>Two side walls will be draped in white sheets. One arduino on each wall will have custom components under the sheets with servos to move the sheets in a flowing motion.</p>
+						<p>The speed of the servos will be determined by the same input as the particle system in the projection.</p>
+						<p>Foil or any other material may be added behind the white sheet, out of view, to add to the noise.</p>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>

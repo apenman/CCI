@@ -1,0 +1,14 @@
+{
+  "name": "cow_say",
+  "version": "0.9.0",
+  "description": "COW SAY NODE PROJECT!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cowsay": "^1.1.9"
+  }
+}

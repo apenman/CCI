@@ -30,9 +30,9 @@ function Cray(x, y, size) {
     this.x += random(-horizontalSpeed,horizontalSpeed)*velocity;
     this.y += random(-verticalSpeed,verticalSpeed)*velocity;
   }
+}
 
-  this.display = function() {
-    fill(this.r, this.g, this.b);
-    ellipse(this.x,this.y,this.size,this.size);
-  }
+Cray.prototype.display = function() {
+  fill(this.r, this.g, this.b);
+  ellipse(this.x,this.y,this.size,this.size);
 }

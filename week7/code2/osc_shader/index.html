@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>three.js webgl - shader [Monjori]</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+    body {
+        color: #ffffff;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+        font-weight: bold;
+        background-color: #000000;
+        margin: 0px;
+        overflow: hidden;
+    }
+
+    #info {
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        padding: 5px;
+    }
+
+    a {
+        color: #ffffff;
+    }
+
+    #oldie a {
+        color: #da0
+    }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <script src="js/three.min.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script src='//code.jquery.com/jquery-1.7.2.min.js'></script>
+    <script src='//localhost:3000/socket.io/socket.io.js'></script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+        void main() { gl_Position = vec4( position, 1.0 ); }
+
+    </script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+//         #ifdef GL_ES
+// precision mediump float;
+// #endif
+
+// uniform float time;
+// uniform vec2 mouse;
+// uniform vec2 resolution;
+// uniform float jim;
+
+// float wave1D( float p1D, float freq, float amp ) {
+// 	return sin((time * 4.0 * jim) + p1D * freq) * amp;
+// }
+
+// void main( void ) {
+
+// 	vec2 pos = ( gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+
+// 	float dist = 0.0;
+// 	float color = 0.0;
+
+// 	float wave = 0.0;
+// 	float freq = 1.6;
+// 	float amp = 1.1;
+
+// 	for( float i = 0.0; i < 5.0; i++ ){
+// 		wave += wave1D( pos.x, pow(freq, (i + jim)), amp / (i + 1.0) );
+// 	}
+
+// 	vec2 q = pos / wave;
+
+// 	dist = jim / abs(length(jim) * length(q)) / abs(q.y - pos.x);
+// 	//dist = pow(dist, 2.0);
+
+// 	float r = dist * abs(sin(jim * jim + wave)) * 0.3 ;
+// 	float g = dist * abs(sin(jim * 0.925 + wave)) * 0.85;
+// 	float b = dist * abs(cos(jim * 0.366 + wave)) * 1.1;
+
+// 	gl_FragColor = vec4( jim, g, b, 1.0 );
+// }
+precision mediump float;
+uniform vec2 mouse;
+uniform vec2 resolution;
+uniform float jim;
+
+// ehh. colors
+void main(void){
+    vec2 p = gl_FragCoord.xy / resolution.xy;
+    vec4 dmin = vec4(1000.);
+    vec2 z = (-1.0 + 2.0*p)*vec2(1.7,1.0);
+    float w = .1 * p.x * p.y;
+    vec2 op = 1./p; //(p - 0.5) * 2.;
+    vec2 mv = ((mouse-vec2(0.5))+vec2(1./acos(op.x*w),1.-atan(op.y*w)));
+    for( int i=0; i<4; i++ ){ //So many loops?
+        z = mv+vec2(z.x*z.x-z.y*z.y,2.0*z.x*z.y);
+        mv /= mv*.0005;
+        z += z*0.05;
+        dmin=min(dmin,vec4(abs(0.0+z.y+jim*sin(z.x)),abs(jim+z.x+0.5*sin(z.y)),dot(z,z),length(fract(z)-0.5)));
+    }
+    vec3 color = vec3( mix(vec3(dot(dmin.rgb, -dmin.gba)), dmin.rgb, 1.0-dmin.a) );
+    color = mix( color, vec3(1.00,1.00,0.00),  1.00-min(1.0,pow(dmin.z*1.00,0.15)));
+    color = mix( color, vec3(0.00,1.00,1.00),  1.00-min(1.0,pow(dmin.x*0.25,0.20)));
+    color = mix( color, vec3(1.00,0.00,1.00),  1.00-min(1.0,pow(dmin.y*0.50,0.50)));
+    color = mix( color, vec3(1.00,1.00,0.00),  1.00-min(1.0,pow(dmin.z*1.00,0.15)));
+    color = 1.25 * color*color;
+    gl_FragColor = vec4(1.0-color*(0.5 + 0.5*pow(16.0*p.x*(1.0-p.x)*p.y*(1.0-p.y),0.15)),1.0);}
+
+// Created by inigo quilez - iq/2013 // glslsandbox mod by Robert Schütze - trirop/2015
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+
+    </script>
+    <script>
+function map_range(value, low1, high1, low2, high2) {
+    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+}
+
+    var socket = io.connect('//localhost:3000');
+    socket.on('data', function(data) {
+        console.log(data);
+        $('#incoming').text(data);
+        jim = map_range(data,0,1,0,8192);
+    });
+    socket.on('error', function() {
+        console.error(arguments)
+    });
+        socket.on('error', function() { console.error(arguments) });
+        socket.on('message', function() { console.log(arguments) });
+
+    if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+    var container, stats;
+
+    var camera, scene, renderer;
+
+    var uniforms;
+
+    var jim = 0.1;
+
+    init();
+    animate();
+
+function map_range(value, low1, high1, low2, high2) {
+    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+}
+
+    function init() {
+
+
+        container = document.getElementById('container');
+
+        camera = new THREE.Camera();
+        camera.position.z = 1;
+
+        scene = new THREE.Scene();
+
+        var geometry = new THREE.PlaneBufferGeometry(2, 2);
+
+        uniforms = {
+            time: {
+                type: "f",
+                value: 1.0
+            },
+            jim: {
+                type: "f",
+                value: 0.1
+            },
+            resolution: {
+                type: "v2",
+                value: new THREE.Vector2()
+            }
+        };
+
+        var material = new THREE.ShaderMaterial({
+
+            uniforms: uniforms,
+            vertexShader: document.getElementById('vertexShader').textContent,
+            fragmentShader: document.getElementById('fragmentShader').textContent
+
+        });
+
+        var mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        renderer = new THREE.WebGLRenderer();
+        // renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.top = '0px';
+        container.appendChild(stats.domElement);
+
+        onWindowResize();
+
+        window.addEventListener('resize', onWindowResize, false);
+
+    }
+
+    function onWindowResize(event) {
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        uniforms.resolution.value.x = renderer.domElement.width;
+        uniforms.resolution.value.y = renderer.domElement.height;
+
+    }
+
+    //
+
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        render();
+        stats.update();
+
+    }
+
+    function render() {
+
+        uniforms.time.value += 0.05;
+        uniforms.jim.value = map_range(jim,0,80,0.1,.300);
+
+        renderer.render(scene, camera);
+
+    }
+    </script>
+</body>
+
+</html>

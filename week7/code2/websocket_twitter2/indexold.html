@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src='//code.jquery.com/jquery-1.7.2.min.js'></script>
+    <script src='//localhost:3000/socket.io/socket.io.js'></script>
+    <script src="http://vincentgarreau.com/particles.js/particles.js"></script>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title></title>
+    <style>
+    @import url(http://fonts.googleapis.com/css?family=Roboto:100);
+    @import url(http://fonts.googleapis.com/css?family=Roboto:100);
+    @import url(http://fonts.googleapis.com/css?family=Oswald:400,700);
+    
+    @font-face {
+        font-family: 'DINEngschrift';
+        src: url('http://mhellar.github.io/ws_text/7text/DINEngschrift.ttf');
+        /* For non-IE browsers */
+    }
+    
+    * {
+        box-sizing: border-box;
+        font-family: Oswald;
+    }
+    
+    html,
+    body {
+        margin: 0;
+        background: #44aaff;
+    }
+    
+    canvas {
+        display: block;
+        vertical-align: bottom;
+    }
+    
+    #aa_particles {
+        z-index: 4;
+        height: 100%;
+        height: 100vh;
+        background: #4477bb;
+    }
+    
+    .aa_sec {
+        position: absolute;
+        z-index: 5;
+        top: 30%;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+    }
+    
+    .aa_txt {
+        font: 80 60vh/1 Oswald;
+        text-align: center;
+        color: #0C174F;
+        font-size: 100px;
+
+    }
+    
+    .aa_inner {
+        padding: 0 2rem;
+        text-transform: uppercase;
+    }
+    
+    .aa_of {
+        color: #ffffff;
+        margin-top: 35px;
+    }
+    
+    .aa_of_upper {
+        color: #000066;
+        font: 70 50vh/1 Oswald;
+        text-align: center;
+        font-size: 50px;
+        text-transform: uppercase;
+        margin-top: 25px;
+
+    }
+    
+    .aa_ahmadawais {
+        display: table;
+        f width: 100%;
+        vertical-align: bottom;
+        margin: 5rem 0 5rem;
+        text-align: center;
+        background: #44aaff;
+        color: #ffffff;
+        font: 100 2vh/2 Oswald;
+    }
+    
+    .aa_ahmadawais a {
+        color: #cccccc;
+        text-decoration: none;
+        border-bottom: 1px solid #cccccc;
+    }
+    </style>
+</head>
+
+<body>
+    <script>
+       var dist = 250;
+    $(document).ready(function() {
+        particlesJS('aa_particles', {
+            particles: {
+                color: '#fff',
+                shape: 'circle',
+                opacity: 0.8,
+                size: 3.5,
+                size_random: true,
+                nb: 500,
+                line_linked: {
+                    enable_auto: true,
+                    distance: dist,
+                    color: '#33ccff',
+                    opacity: 0.5,
+                    width: 1.5,
+                    condensed_mode: {
+                        enable: false,
+                        rotateX: 600,
+                        rotateY: 600
+                    }
+                },
+                anim: {
+                    enable: true,
+                    speed: 6
+                }
+            },
+            interactivity: {
+                enable: true,
+                mouse: {
+                    distance: 75
+                },
+                detect_on: 'canvas',
+                mode: 'grab',
+                line_linked: {
+                    opacity: 0.5
+                },
+                events: {
+                    onclick: {
+                        push_particles: {
+                            enable: true,
+                            nb: 4
+                        }
+                    }
+                }
+            },
+            retina_detect: true
+        });
+
+
+        function setDist() {
+            dist = 250;
+        }
+
+        //     var socket = io.connect('//localhost:3000');
+
+        // socket.on('welcome', function(data) {
+        //     $('#messages').append('<li>' + data.message + '</li>');
+
+        //     socket.emit('i am client', {
+        //         data: 'foo!'
+        //     });
+        // });
+        // socket.on('tweet', function(data) {
+        //     console.log(data);
+        //     // $('#tweet').text(data.message);
+        //     dist = 100;
+        //     setTimeout(setDist, 1000);
+        // });
+        // socket.on('error', function() {
+        //     console.error(arguments)
+        // });
+        // socket.on('message', function() {
+        //     console.log(arguments)
+        // });
+        var items = [
+            "complex",
+            "Collaborative",
+            "Anti-schedule",
+            "dynamic",
+            "different",
+            "Transparentcy",
+            "automated ",
+            "innovation",
+            "Piecemeal",
+            "collaboration",
+            "complicated",
+            "less",
+            "selfpreneurs",
+            "insecure",
+            "on-demand",
+            "Risky",
+            "virtual online assistant",
+            "LIMITLESS",
+            "Exclusive",
+            "Flexible",
+            "unpredictable",
+            "Innovative",
+            "disparity",
+            "Computery",
+            "Modular",
+            "flexible",
+            "convoluted",
+            "uncertain",
+            "lifestyle",
+            "exciting",
+            "Agism",
+            "Hustle",
+            "challenging",
+            "Transparent",
+            "independence",
+            "Transformative",
+            "globalization",
+            "Flexible",
+            "boundless",
+            "universal",
+            "Innovation",
+            "entrepreneurial",
+            "Growth",
+            "Mobility",
+            "selfemployment",
+            "collaborative",
+            "Difficult",
+            "Ambitious",
+            "transformative",
+            "opportunity",
+            "Liberating!",
+            "Mobile",
+            "adapting",
+            "Collaborate",
+            "Independent ",
+            "challenge",
+            "independent",
+            "Flexible",
+            "interesting",
+            "Growth",
+            "uncertain",
+            "Co-inspiring",
+            "disruptive",
+            "Innovative",
+            "Unknown",
+            "Clash",
+            "mobile",
+            "self-sufficiency",
+            "challenging",
+            "innovative ",
+            "Remote",
+            "liberating ",
+            "Groundbreaking.",
+            "awesome!",
+            "malleable",
+            "difficult",
+            "Streaming",
+            "change",
+            "change",
+            "Contingent",
+            "transformative",
+            "flexible",
+            "sustainable",
+            "engagement",
+            "unpredictable",
+            "flexible ",
+            "antidisestablishmentarianist",
+            "dystopian?",
+            "Freelance",
+            "regressive",
+            "Evolving ",
+            "Flux",
+            "fast",
+            "it",
+            "Evolutionism",
+            "Less",
+            "AWESOME",
+            "scary",
+            "Connected",
+            "dedication",
+            "Confusing ",
+            "competitive",
+            "Virtual",
+            "Creative",
+            "global",
+            "Evolved",
+            "supreme",
+            "unshackled",
+            "chaotic",
+            "Capricious",
+            "Liberating",
+            "Liberating ",
+            "Uncertainty",
+            "Flexibility",
+            "Unknown",
+            "Flexible ",
+            "unknown",
+            "shifting",
+            "Grounbreaking",
+            "flexible",
+            "iterative",
+            "Flexible",
+            "goblins",
+            "Flexibility",
+            "transformed",
+            "Transformative",
+            "Limitless",
+            "independent",
+            "Uncertain",
+            "ever-evolving ",
+            "changing",
+            "ever-changing",
+            "Constant",
+            "Evolving",
+            "Demands",
+            "Complex",
+            "design",
+            "Fluid",
+            "Self",
+            "automated",
+            "Exciting and scary",
+            "Solutions",
+            "Remote",
+            "Freedom",
+            "Augmented",
+            "moveable",
+            "Unsustainable",
+            "Creative ",
+            "AlwaysOn",
+            "Flexible",
+            "time management",
+            "Excellent",
+            "Barter",
+            "flexible",
+            "Freelance",
+            "Work!",
+            "fluid",
+            "collaboration",
+            "soloentrepreneurs",
+            "Changing",
+            "unstable",
+            "flexible",
+            "sad",
+            "dynamic",
+            "contracted",
+            "Freelance Video Editor",
+            "Flexibility ",
+            "scary",
+            "Creative",
+            "projectized",
+            "fierce",
+            "mobile",
+            "Creative",
+            "contracting",
+            "Flexible",
+            "flexible",
+            "Dynamic",
+            "revolutionary",
+            "Entrepreneurship",
+            "challenging ",
+            "mobile ",
+            "Eminent",
+            "Personal",
+            "Banker",
+            "Hope",
+            "on-demand",
+            "Challenging ",
+            "fluxy",
+            "Purpose",
+            "Hollow",
+            "multi-platform",
+            "independent",
+            "different",
+            "individualistic"
+        ];
+
+        function randVar() {
+            var randomItem = items[Math.floor(Math.random() * items.length)];
+            $('#tweet').text(randomItem);
+        }
+        setInterval(randVar, 2500);
+    });
+    </script>
+
+    <div class="aa_sec">
+  <!--   <div align="center"><img src="http://www.bavc.org/sites/default/files/training/workshift2020/WS2020_banner.jpg" height="200"></div> -->
+    <div  class="aa_of_upper">The future of work is</div>
+        <div class="aa_txt">
+            <span class="aa_inner">
+      <span class="aa_of">US</span>
+            </span>
+        </div>
+    </div>
+    <div id="aa_particles"></div>
+</body>
+
+</html>

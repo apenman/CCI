@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="js/howler.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<script>
+var socket = io.connect('//localhost:3000');
+    socket.on('data', function(data) {
+        console.log(data);
+        $('#incoming').text(data);
+    });
+    socket.on('error', function() {
+        console.error(arguments)
+    });
+</script>
+
+<svg viewBox="0 0 1080 300">
+    <symbol id="s-text">
+        <text id="incoming" text-anchor="middle" x="50%" y="80%">Welcome</text>
+    </symbol>
+
+    <g class = "g-ants">
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+    </g>
+</svg>
+
+</body>
+</html>

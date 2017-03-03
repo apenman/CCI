@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="js/howler.min.js"></script>
+</head>
+<body>
+<script>
+
+//load some sounds
+var sound = new Howl({
+  urls: ['sounds/bubbles.wav']
+})
+
+var sound1 = new Howl({
+  urls: ['sounds/crush.wav']
+})
+
+var sound2 = new Howl({
+  urls: ['sounds/jackpot.wav']
+})
+
+var sound3 = new Howl({
+  urls: ['sounds/whoosh.wav']
+})
+
+var sound4 = new Howl({
+  urls: ['sounds/explosion.wav']
+})
+
+var sound5 = new Howl({
+  urls: ['sounds/whoosh.wav']
+})
+
+var sound6 = new Howl({
+  urls: ['sounds/squeak.wav']
+})
+
+
+
+//Connect to node server and recieve data via a websocket
+var socket = io.connect('//localhost:3000');
+    socket.on('data', function(data) {
+        //log the data
+        console.log(data);
+        //parse the data
+        parse(data);
+        //Jquery function to set text of H1 text to websocket data
+        $('#incoming').text(data);
+
+    });
+    socket.on('error', function() {
+        console.error(arguments)
+    });
+
+//Function to parse incoming data
+    function parse(incoming){
+    if (incoming[0] == '/2/push1' && incoming[1] == 1) {
+        console.log("beep");
+        sound.play();
+        $('#gif').attr('src', "img/butter.gif");
+
+    } else if (incoming[0] == '/2/push2' && incoming[1] == 1) {
+        console.log("beep2");
+        sound1.play();
+        $('#gif').attr('src', "img/dots.gif");
+
+    } else if (incoming[0] == '/2/push3' && incoming[1] == 1) {
+        console.log("beep3");
+        sound2.play();
+        $('#gif').attr('src', "img/phone.gif");
+
+    } else if (incoming[0] == '/2/push4' && incoming[1] == 1) {
+        console.log("beep4");
+        sound3.play();
+        $('#gif').attr('src', "img/dots.gif");
+
+    } else if (incoming[0] == '/2/push5' && incoming[1] == 1) {
+        console.log("beep4");
+        sound4.play();
+        $('#gif').attr('src', "img/waves.gif");
+
+    } else if (incoming[0] == '/2/push6' && incoming[1] == 1) {
+        console.log("beep4");
+        sound5.play();
+        $('#gif').attr('src', "img/butter.gif");
+
+    } else if (incoming[0] == '/2/push7' && incoming[1] == 1) {
+        console.log("beep4");
+        sound6.play();
+        $('#gif').attr('src', "img/butter.gif");
+
+    }
+}
+
+
+</script>
+<h1 id="incoming">hi</h1>
+<img id="gif"></img>
+
+</body>
+</html>

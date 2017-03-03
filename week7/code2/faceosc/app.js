@@ -1,6 +1,8 @@
+/* Run FaceOSC simultaneously and get data points */
+
 var osc = require('node-osc');
 
-//import express 
+//import express
 var express = require('express');
 //create express object named app
 var app = express();
@@ -18,7 +20,7 @@ app.get('/', function(req, res) {
 });
 
 //Connect to server, Our device
-var oscServer = new osc.Server(8338, '192.168.1.161');
+var oscServer = new osc.Server(8338, 'localhost');
 
 //When we recieve a message send it as a web socket
 oscServer.on("message", function(msg, rinfo) {
@@ -47,4 +49,3 @@ oscServer.on("message", function(msg, rinfo) {
     // }
 
 });
-

@@ -26,6 +26,5 @@ oscServer.on("message", function(msg, rinfo) {
     console.log(msg);
     var ctrl = msg[0];
     var val = msg[1];
-
-    io.sockets.emit('data', val);
+    io.sockets.emit('f1', msg);
 });

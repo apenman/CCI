@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script src="https://cdn.pubnub.com/pubnub-dev.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    @import url(http://fonts.googleapis.com/css?family=Varela+Round);
+body {
+  background: hsla(0, 0%, 0%, .9);
+}
+
+h1 {
+  color: hsla(0, 0%, 0%, .9);
+  font: normal 140px Varela Round, sans-serif;
+  height: 140px;
+  left: 0;
+  letter-spacing: 5px;
+  margin: -80px 0 0 0;
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  top: 20%;
+  width: 100%;
+  animation: move linear 2000ms infinite;
+}
+
+@keyframes move {
+  0% {
+    text-shadow: 4px -4px 0 hsla(0, 100%, 50%, 1), 3px -3px 0 hsla(0, 100%, 50%, 1), 2px -2px 0 hsla(0, 100%, 50%, 1), 1px -1px 0 hsla(0, 100%, 50%, 1), -4px 4px 0 hsla(180, 100%, 50%, 1), -3px 3px 0 hsla(180, 100%, 50%, 1), -2px 2px 0 hsla(180, 100%, 50%, 1), -1px 1px 0 hsla(180, 100%, 50%, 1);
+  }
+  25% {
+    text-shadow: -4px -4px 0 hsla(180, 100%, 50%, 1), -3px -3px 0 hsla(180, 100%, 50%, 1), -2px -2px 0 hsla(180, 100%, 50%, 1), -1px -1px 0 hsla(180, 100%, 50%, 1), 4px 4px 0 hsla(0, 100%, 50%, 1), 3px 3px 0 hsla(0, 100%, 50%, 1), 2px 2px 0 hsla(0, 100%, 50%, 1), 1px 1px 0 hsla(0, 100%, 50%, 1);
+  }
+  50% {
+    text-shadow: -4px 4px 0 hsla(0, 100%, 50%, 1), -3px 3px 0 hsla(0, 100%, 50%, 1), -2px 2px 0 hsla(0, 100%, 50%, 1), -1px 1px 0 hsla(0, 100%, 50%, 1), 4px -4px 0 hsla(180, 100%, 50%, 1), 3px -3px 0 hsla(180, 100%, 50%, 1), 2px -2px 0 hsla(180, 100%, 50%, 1), 1px -1px 0 hsla(180, 100%, 50%, 1);
+  }
+  75% {
+    text-shadow: 4px 4px 0 hsla(180, 100%, 50%, 1), 3px 3px 0 hsla(180, 100%, 50%, 1), 2px 2px 0 hsla(180, 100%, 50%, 1), 1px 1px 0 hsla(180, 100%, 50%, 1), -4px -4px 0 hsla(0, 100%, 50%, 1), -3px -3px 0 hsla(0, 100%, 50%, 1), -2px -2px 0 hsla(0, 100%, 50%, 1), -1px -1px 0 hsla(0, 100%, 50%, 1);
+  }
+  100% {
+    text-shadow: 4px -4px 0 hsla(0, 100%, 50%, 1), 3px -3px 0 hsla(0, 100%, 50%, 1), 2px -2px 0 hsla(0, 100%, 50%, 1), 1px -1px 0 hsla(0, 100%, 50%, 1), -4px 4px 0 hsla(180, 100%, 50%, 1), -3px 3px 0 hsla(180, 100%, 50%, 1), -2px 2px 0 hsla(180, 100%, 50%, 1), -1px 1px 0 hsla(180, 100%, 50%, 1);
+  }
+}
+    </style>
+    <style type="text/css" media="screen">
+    h4 {
+        margin-top: 25px;
+    }
+    
+    .row {
+        margin-bottom: 20px;
+    }
+    
+    .row .row {
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+    
+    [class*="col-"] {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        background-color: #eee;
+        background-color: rgba(86, 61, 124, .15);
+        border: 1px solid #ddd;
+        border: 1px solid rgba(86, 61, 124, .2);
+    }
+    
+    hr {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+    </style>
+</head>
+<body onload="sub()">
+    <h1 id='messages'></h1>
+    <script type="text/javascript">
+    var pubnub = PUBNUB({
+        publish_key: "pub-c-cac4998d-3a3c-4e69-a15b-c37b67659b4e",
+        subscribe_key: "sub-c-637e8586-cf9d-11e4-8902-02ee2ddab7fe"
+    })
+
+    function sub() {
+        pubnub.subscribe({
+            channel: 'Channel-p9uoju3qs',
+            message: function(m) {
+                console.log(m);
+                $('#messages').text(m);
+            },
+            error: function(error) {
+                // Handle error here
+                console.log(JSON.stringify(error));
+            }
+        });
+    }
+    function pub(msg) {
+        pubnub.publish({
+            channel: 'Channel-p9uoju3qs',
+            message: msg,
+            callback: function(m) {
+                console.log(m)
+                $('#messages').text(m);
+            }
+        });
+    }
+    </script>
+</body>
+
+</html>

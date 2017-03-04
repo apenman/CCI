@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Servo Slider</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            var socket = io();
+            $("#slider-vertical").slider({
+                orientation: "vertical",
+                range: "min",
+                min: 0,
+                max: 180,
+                value: 90,
+                slide: function(event, ui) {
+                    $("#amount").val(ui.value);
+                    console.log(ui.value);
+                    socket.emit('message', ui.value);
+                }
+            });
+            $("#amount").val($("#slider-vertical").slider("value"));
+        });
+    </script>
+</head>
+
+<body>
+    <ul id="messages"></ul>
+    <p>
+        <label for="amount">Value:</label>
+        <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="slider-vertical" style="height:200px;"></div>
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>three.js webgl - shader [Monjori]</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+            color: #ffffff;
+            font-family: Monospace;
+            font-size: 13px;
+            text-align: center;
+            font-weight: bold;
+            background-color: #000000;
+            margin: 0px;
+            overflow: hidden;
+        }
+        
+        #info {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            padding: 5px;
+        }
+        
+        a {
+            color: #ffffff;
+        }
+        
+        #oldie a {
+            color: #da0
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <script src="js/three.min.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script src='//code.jquery.com/jquery-1.7.2.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+        void main() { gl_Position = vec4( position, 1.0 ); }
+
+    </script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+        #ifdef GL_ES precision mediump float; #endif uniform float time; uniform vec2 mouse; uniform vec2 resolution; uniform float jim; float wave1D( float p1D, float freq, float amp ) { return sin((time * 4.0 * jim) + p1D * freq) * amp; } void main( void )
+        { vec2 pos = ( gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y); float dist = 0.0; float color = 0.0; float wave = 0.0; float freq = 1.6; float amp = 1.1; for( float i = 0.0; i
+        < 5.0; i++ ){ wave +=w ave1D( pos.x,
+            pow(freq, (i + jim)), amp / (i + 1.0) ); } vec2 q=p os / wave; dist=j im / abs(length(jim) * length(q)) / abs(q.y - pos.x); //dist=p ow(dist, 2.0); float r=d ist * abs(sin(jim * 0.185 + wave)) * 0.3 ; float g=d ist * abs(sin(jim * 0.925 + wave))
+            * 0.85; float b=d ist * abs(cos(jim * 0.366 + wave)) * 1.1; gl_FragColor=v ec4( r, g, b, 1.0 ); } </script>
+            <script>
+                var socket = io.connect('//localhost:3000');
+                socket.on('data', function(data) {
+                    console.log(data);
+                    jim = data.val;
+                });
+                socket.on('error', function() {
+                    console.error(arguments)
+                });
+                socket.on('message', function() {
+                    console.log(arguments)
+                });
+
+                if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+                var container, stats;
+
+                var camera, scene, renderer;
+
+                var uniforms;
+
+                var jim = 0.1;
+
+                init();
+                animate();
+
+                function map_range(value, low1, high1, low2, high2) {
+                    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+                }
+
+                function init() {
+
+
+                    container = document.getElementById('container');
+
+                    camera = new THREE.Camera();
+                    camera.position.z = 1;
+
+                    scene = new THREE.Scene();
+
+                    var geometry = new THREE.PlaneBufferGeometry(2, 2);
+
+                    uniforms = {
+                        time: {
+                            type: "f",
+                            value: 1.0
+                        },
+                        jim: {
+                            type: "f",
+                            value: 0.1
+                        },
+                        resolution: {
+                            type: "v2",
+                            value: new THREE.Vector2()
+                        }
+                    };
+
+                    var material = new THREE.ShaderMaterial({
+
+                        uniforms: uniforms,
+                        vertexShader: document.getElementById('vertexShader').textContent,
+                        fragmentShader: document.getElementById('fragmentShader').textContent
+
+                    });
+
+                    var mesh = new THREE.Mesh(geometry, material);
+                    scene.add(mesh);
+
+                    renderer = new THREE.WebGLRenderer();
+                    // renderer.setPixelRatio(window.devicePixelRatio);
+                    container.appendChild(renderer.domElement);
+
+                    stats = new Stats();
+                    stats.domElement.style.position = 'absolute';
+                    stats.domElement.style.top = '0px';
+                    container.appendChild(stats.domElement);
+
+                    onWindowResize();
+
+                    window.addEventListener('resize', onWindowResize, false);
+
+                }
+
+                function onWindowResize(event) {
+
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+
+                    uniforms.resolution.value.x = renderer.domElement.width;
+                    uniforms.resolution.value.y = renderer.domElement.height;
+
+                }
+
+                //
+
+                function animate() {
+
+                    requestAnimationFrame(animate);
+
+                    render();
+                    stats.update();
+
+                }
+
+                function render() {
+
+                    uniforms.time.value += 0.05;
+                    uniforms.jim.value = map_range(jim, 0, 80, 0.1, .300);
+
+                    renderer.render(scene, camera);
+
+                }
+            </script>
+</body>
+
+</html>

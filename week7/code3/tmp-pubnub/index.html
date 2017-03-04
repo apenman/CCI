@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script src="https://cdn.pubnub.com/pubnub-dev.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    </style>
+</head>
+<body onload="sub()">
+    <h1 id='messages'></h1>
+    <script type="text/javascript">
+    var pubnub = PUBNUB({
+        publish_key: "pub-c-cac4998d-3a3c-4e69-a15b-c37b67659b4e",
+        subscribe_key: "sub-c-637e8586-cf9d-11e4-8902-02ee2ddab7fe"
+    })
+
+    function sub() {
+        pubnub.subscribe({
+            channel: 'Channel-p9uoju3qs',
+            message: function(m) {
+                console.log(m);
+                $('#messages').text(m);
+            },
+            error: function(error) {
+                // Handle error here
+                console.log(JSON.stringify(error));
+            }
+        });
+    }
+    function pub(msg) {
+        pubnub.publish({
+            channel: 'my_channel',
+            message: msg,
+            callback: function(m) {
+                console.log(m)
+                $('#messages').text(m);
+            }
+        });
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Serial Connect</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script>
+        var socket = io.connect('//localhost:3000');
+        socket.on('data', function(data) {
+            console.log(data);
+            $('.incoming').text(data);
+            $("img").attr("width", data);
+        });
+        socket.on('error', function() {
+            console.error(arguments)
+        });
+    </script>
+</head>
+
+<body>
+
+    <h1 class="incoming"></h1>
+    <img src="https://apennyformychildishthoughts.files.wordpress.com/2012/03/furby.jpg">
+
+</body>
+
+</html>

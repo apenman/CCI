@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <style>
+    .wrap {
+        margin: 30px auto 10px;
+        text-align: center
+    }
+    
+    .container {
+        width: 511px;
+        height: 382px;
+        border: 5px solid #ccc
+    }
+    
+    p {
+        font: 10px/1.0em 'Helvetica', sans-serif;
+        margin: 20px
+    }
+    </style>
+    <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+</head>
+
+<body>
+    <script>
+    $("input[type=button]").click(function() {
+        var $target = "testvid_" + $(this).attr("rel");
+        var $content_path = "http://dev.swinginsam.com/_files/";
+        var $vid_obj = _V_("div_video");
+
+        // hide the current loaded poster
+        $("img.vjs-poster").hide();
+
+        $vid_obj.ready(function() {
+            // hide the video UI
+            $("#div_video_html5_api").hide();
+            // and stop it from playing
+            $vid_obj.pause();
+            // assign the targeted videos to the source nodes
+            $("video:nth-child(1)").attr("src", $content_path + $target + ".mp4");
+            // $("video:nth-child(1)").attr("src", $content_path + $target + ".ogv");
+            // $("video:nth-child(1)").attr("src", $content_path + $target + ".webm");
+            // replace the poster source
+            $("img.vjs-poster").attr("src", $content_path + $target + ".jpg").show();
+            // reset the UI states
+            $(".vjs-big-play-button").show();
+            $("#div_video").removeClass("vjs-playing").addClass("vjs-paused");
+            // load the new sources
+            $vid_obj.load();
+            $("#div_video_html5_api").show();
+        });
+    });
+
+    $("input[rel='01']").click();
+    </script>
+    <section class="container wrap">
+        <video id="div_video" class="video-js vjs-default-skin" controls preload="auto" width="511" height="382" poster="http://dev.swinginsam.com/_files/testvid_01.jpg" data-setup="{}">
+            <source src="" type="video/mp4">
+                <source src="" type="video/ogg">
+                    <source src="" type="video/webm">
+        </video>
+    </section>
+    </div>
+</body>
+
+</html>
